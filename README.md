@@ -7,6 +7,8 @@
   <img src="https://img.shields.io/badge/Discord-Stable%20%7C%20Canary%20%7C%20PTB-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Discord channels">
   <img src="https://img.shields.io/badge/Mode-Fully%20Silent-111827?style=for-the-badge" alt="Fully silent">
   <img src="https://img.shields.io/badge/Integrity-SHA--256-059669?style=for-the-badge" alt="SHA-256 verified">
+  <a href="https://github.com/KLAW-G/Vencord-Auto-Install/releases/latest"><img src="https://img.shields.io/github/v/release/KLAW-G/Vencord-Auto-Install?style=for-the-badge&color=8b5cf6" alt="Latest release"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/KLAW-G/Vencord-Auto-Install?style=for-the-badge&color=dc2626" alt="GPL-3.0 license"></a>
 </p>
 
 <h3 align="center">Automatic Vencord installation — silent, secure, and built for every Discord channel</h3>
@@ -14,6 +16,12 @@
 <p align="center">
   A lightweight Windows tool that detects Discord Stable, Canary, and PTB, downloads the official Vencord Installer,<br>
   verifies its integrity, then runs two install and repair passes for every detected version — without a CMD window.
+</p>
+
+<p align="center">
+  <a href="https://github.com/KLAW-G/Vencord-Auto-Install/releases/latest/download/Vencord-Auto-Install-v1.zip"><strong>⬇ Download the latest release</strong></a>
+  &nbsp;•&nbsp;
+  <a href="https://github.com/KLAW-G/Vencord-Auto-Install/releases">Release notes</a>
 </p>
 
 <p align="center">
@@ -36,6 +44,12 @@
 </table>
 
 ## 🚀 Quick manual installation
+
+### Requirements
+
+- Windows 10 or Windows 11
+- An internet connection with access to GitHub
+- Discord Stable, Canary, or PTB installed for the current Windows user
 
 1. Double-click **`Install Vencord Hidden.vbs`**.
 2. Let it run in the background. Discord may close automatically while its files are being patched.
@@ -140,6 +154,7 @@ This mode tests Discord detection, downloads the installer, and verifies its che
 2. Close Discord completely, then run **`Install Vencord Hidden.vbs`** again.
 3. Check **`Vencord-Install.log`** to identify the version or pass that failed.
 4. If you moved the downloaded files before clicking Add, open `Startup.vbs` from the new location and click Add again.
+5. If the problem continues, [open a bug report](https://github.com/KLAW-G/Vencord-Auto-Install/issues/new?template=bug_report.yml) and attach the log after removing any personal paths.
 
 ---
 

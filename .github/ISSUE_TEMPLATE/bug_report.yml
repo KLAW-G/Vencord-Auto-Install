@@ -1,0 +1,70 @@
+name: Bug report
+description: Report an installation, Startup Manager, or Discord detection problem.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a problem. Do not include your Discord token, password, or other private information.
+
+  - type: dropdown
+    id: windows
+    attributes:
+      label: Windows version
+      options:
+        - Windows 11
+        - Windows 10
+        - Other
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: discord
+    attributes:
+      label: Installed Discord versions
+      options:
+        - label: Discord Stable
+        - label: Discord Canary
+        - label: Discord PTB
+    validations:
+      required: true
+
+  - type: dropdown
+    id: action
+    attributes:
+      label: How did you run the tool?
+      options:
+        - Install Vencord Hidden.vbs
+        - Startup.vbs — Add
+        - Startup.vbs — Remove
+        - Automatic Windows Startup
+        - PowerShell DryRun
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Explain what you expected and what happened instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: log
+    attributes:
+      label: Relevant log output
+      description: Paste only the relevant part of Vencord-Install.log and remove personal paths first.
+      render: text
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I downloaded the latest release.
+          required: true
+        - label: I removed passwords, tokens, and private information from this report.
+          required: true

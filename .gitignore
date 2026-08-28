@@ -1,0 +1,11 @@
+# Runtime output
+Vencord-Install.log
+
+# Windows metadata
+Thumbs.db
+Desktop.ini
+
+# Editor metadata
+.vscode/
+.idea/
+*.user

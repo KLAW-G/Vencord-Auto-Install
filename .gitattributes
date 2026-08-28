@@ -1,0 +1,9 @@
+# Keep executable Windows scripts in their native line-ending format.
+*.vbs text eol=crlf
+*.ps1 text eol=crlf
+*.hta text eol=crlf
+
+# Keep documentation and vector assets consistent on GitHub.
+*.md text eol=lf
+*.svg text eol=lf
+*.yml text eol=lf
