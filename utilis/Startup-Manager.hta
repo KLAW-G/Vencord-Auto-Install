@@ -367,6 +367,9 @@
                 sourceDirectory = getSourceDirectory();
                 sourceLauncherPath = combinePath(sourceDirectory, "Install Vencord Hidden.vbs");
                 sourcePowerShellPath = combinePath(sourceDirectory, "Install-Vencord-All.ps1");
+                if (!fileSystem.FileExists(sourceLauncherPath)) {
+                    sourceLauncherPath = combinePath(fileSystem.GetParentFolderName(sourceDirectory), "Install Vencord Hidden.vbs");
+                }
                 installDirectory = combinePath(shell.ExpandEnvironmentStrings("%LOCALAPPDATA%"), "VencordAutoInstaller");
                 installedLauncherPath = combinePath(installDirectory, "Install Vencord Hidden.vbs");
                 installedPowerShellPath = combinePath(installDirectory, "Install-Vencord-All.ps1");

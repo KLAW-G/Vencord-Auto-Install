@@ -29,6 +29,9 @@ Next
 
 scriptDirectory = fileSystem.GetParentFolderName(WScript.ScriptFullName)
 powerShellScript = fileSystem.BuildPath(scriptDirectory, "Install-Vencord-All.ps1")
+If Not fileSystem.FileExists(powerShellScript) Then
+    powerShellScript = fileSystem.BuildPath(fileSystem.BuildPath(scriptDirectory, "utilis"), "Install-Vencord-All.ps1")
+End If
 logFile = fileSystem.BuildPath(scriptDirectory, "Vencord-Install.log")
 
 command = "powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -File " _

@@ -119,9 +119,9 @@ The two passes run sequentially rather than simultaneously for the same Discord 
 | File | Purpose |
 |---|---|
 | `Install Vencord Hidden.vbs` | Hidden launcher for installation and repair |
-| `Install-Vencord-All.ps1` | Detects Discord, downloads and verifies the installer, and runs both passes |
+| `utilis/Install-Vencord-All.ps1` | Detects Discord, downloads and verifies the installer, and runs both passes |
 | `Startup.vbs` | Opens the fast Startup Manager interface |
-| `Startup-Manager.hta` | Dark Add and Remove interface |
+| `utilis/Startup-Manager.hta` | Dark Add and Remove interface |
 | `Vencord-Install.log` | Log from the latest run; created after the tool runs |
 
 ## 🧪 Safe test without modifying Discord
@@ -129,7 +129,7 @@ The two passes run sequentially rather than simultaneously for the same Discord 
 Open PowerShell in the project folder and run:
 
 ```powershell
-.\Install-Vencord-All.ps1 -DryRun -Passes 2
+.\utilis\Install-Vencord-All.ps1 -DryRun -Passes 2
 ```
 
 This mode tests Discord detection, downloads the installer, and verifies its checksum without installing Vencord or modifying any Discord files.
