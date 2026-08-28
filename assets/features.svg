@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="250" viewBox="0 0 1200 250" role="img" aria-labelledby="title description">
+  <title id="title">Vencord Auto Installer features</title>
+  <desc id="description">Four dark feature cards: all Discord channels, silent execution, SHA-256 verification, and double-pass repair.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#090b12"/>
+      <stop offset="0.5" stop-color="#111523"/>
+      <stop offset="1" stop-color="#080a10"/>
+    </linearGradient>
+    <linearGradient id="purple" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a855f7"/><stop offset="1" stop-color="#6366f1"/></linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#38bdf8"/><stop offset="1" stop-color="#2563eb"/></linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#34d399"/><stop offset="1" stop-color="#059669"/></linearGradient>
+    <linearGradient id="pink" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f472b6"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="1200" height="250" rx="24" fill="url(#background)"/>
+  <path d="M0 42H1200M0 208H1200" stroke="#334155" stroke-opacity="0.18"/>
+  <circle cx="50" cy="30" r="90" fill="#7c3aed" opacity="0.06"/><circle cx="1140" cy="220" r="120" fill="#0284c7" opacity="0.06"/>
+  <g transform="translate(30 28)">
+    <rect width="270" height="194" rx="18" fill="#151927" stroke="#8b5cf6" stroke-opacity="0.38"/>
+    <circle cx="135" cy="60" r="30" fill="url(#purple)" opacity="0.18" filter="url(#glow)"/><circle cx="135" cy="60" r="28" fill="url(#purple)"/>
+    <text x="135" y="70" text-anchor="middle" fill="#fff" font-family="Segoe UI, Arial" font-size="25" font-weight="700">3</text>
+    <text x="135" y="120" text-anchor="middle" fill="#f8fafc" font-family="Segoe UI, Arial" font-size="16" font-weight="700" letter-spacing="1.5">ALL CHANNELS</text>
+    <text x="135" y="150" text-anchor="middle" fill="#94a3b8" font-family="Segoe UI, Arial" font-size="14">Stable · Canary · PTB</text>
+  </g>
+  <g transform="translate(320 28)">
+    <rect width="270" height="194" rx="18" fill="#151927" stroke="#38bdf8" stroke-opacity="0.38"/>
+    <circle cx="135" cy="60" r="30" fill="url(#blue)" opacity="0.18" filter="url(#glow)"/><circle cx="135" cy="60" r="28" fill="url(#blue)"/>
+    <path d="M121 60h28M127 51l-9 9 9 9M143 51l9 9-9 9" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="135" y="120" text-anchor="middle" fill="#f8fafc" font-family="Segoe UI, Arial" font-size="16" font-weight="700" letter-spacing="1.5">FULLY SILENT</text>
+    <text x="135" y="150" text-anchor="middle" fill="#94a3b8" font-family="Segoe UI, Arial" font-size="14">No CMD · No PowerShell window</text>
+  </g>
+  <g transform="translate(610 28)">
+    <rect width="270" height="194" rx="18" fill="#151927" stroke="#34d399" stroke-opacity="0.38"/>
+    <circle cx="135" cy="60" r="30" fill="url(#green)" opacity="0.18" filter="url(#glow)"/><circle cx="135" cy="60" r="28" fill="url(#green)"/>
+    <path d="M122 60l8 8 18-19" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="135" y="120" text-anchor="middle" fill="#f8fafc" font-family="Segoe UI, Arial" font-size="16" font-weight="700" letter-spacing="1.5">VERIFIED</text>
+    <text x="135" y="150" text-anchor="middle" fill="#94a3b8" font-family="Segoe UI, Arial" font-size="14">Official SHA-256 checksum</text>
+  </g>
+  <g transform="translate(900 28)">
+    <rect width="270" height="194" rx="18" fill="#151927" stroke="#f472b6" stroke-opacity="0.38"/>
+    <circle cx="135" cy="60" r="30" fill="url(#pink)" opacity="0.18" filter="url(#glow)"/><circle cx="135" cy="60" r="28" fill="url(#pink)"/>
+    <text x="135" y="70" text-anchor="middle" fill="#fff" font-family="Segoe UI, Arial" font-size="22" font-weight="700">×2</text>
+    <text x="135" y="120" text-anchor="middle" fill="#f8fafc" font-family="Segoe UI, Arial" font-size="16" font-weight="700" letter-spacing="1.5">DOUBLE PASS</text>
+    <text x="135" y="150" text-anchor="middle" fill="#94a3b8" font-family="Segoe UI, Arial" font-size="14">Install · Repair · Confirm</text>
+  </g>
+</svg>

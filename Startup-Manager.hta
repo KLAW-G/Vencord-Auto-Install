@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <title>Vencord Startup</title>
+    <HTA:APPLICATION
+        ID="VencordStartupManager"
+        APPLICATIONNAME="Vencord Startup"
+        BORDER="thin"
+        CAPTION="yes"
+        MAXIMIZEBUTTON="no"
+        MINIMIZEBUTTON="no"
+        SCROLL="no"
+        SINGLEINSTANCE="yes"
+        SYSMENU="yes"
+        WINDOWSTATE="normal"
+    />
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            background: #202225;
+            color: #f2f3f5;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        .panel {
+            padding: 18px 22px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0 0 8px 0;
+            font-size: 19px;
+            font-weight: 600;
+        }
+
+        #status {
+            height: 25px;
+            margin: 3px 0 8px 0;
+            font-size: 14px;
+            line-height: 25px;
+            color: #b5bac1;
+        }
+
+        #message {
+            height: 32px;
+            margin: 0 0 9px 0;
+            font-size: 12px;
+            line-height: 16px;
+            color: #b5bac1;
+        }
+
+        .branch-panel {
+            margin: 0 auto 13px auto;
+            padding: 10px 12px;
+            border: 1px solid #3f4147;
+            border-radius: 6px;
+            background: #18191c;
+            text-align: left;
+        }
+
+        .branch-title {
+            margin-bottom: 8px;
+            color: #f2f3f5;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .branch-option {
+            display: inline-block;
+            margin-right: 14px;
+            color: #dbdee1;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .branch-option input {
+            margin: 0 5px 0 0;
+            vertical-align: -2px;
+            accent-color: #23a55a;
+        }
+
+        button {
+            width: 125px;
+            height: 40px;
+            margin: 0 7px;
+            border: 0;
+            border-radius: 4px;
+            color: white;
+            font-family: "Segoe UI", Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        #addButton { background: #248046; }
+        #removeButton { background: #da373c; }
+        button:disabled { background: #4e5058 !important; color: #949ba4; cursor: default; }
+    </style>
+    <script language="javascript">
+        var shell;
+        var fileSystem;
+        var sourceDirectory;
+        var sourceLauncherPath;
+        var sourcePowerShellPath;
+        var installDirectory;
+        var installedLauncherPath;
+        var installedPowerShellPath;
+        var installedLogPath;
+        var shortcutPath;
+        var wscriptPath;
+        var availableBranches = [];
+
+        function getSourceDirectory() {
+            var path = decodeURIComponent(window.location.pathname);
+            if (path.charAt(0) === "/" && path.charAt(2) === ":") {
+                path = path.substring(1);
+            }
+            path = path.replace(/\//g, "\\");
+            return fileSystem.GetParentFolderName(path);
+        }
+
+        function combinePath(parent, child) {
+            return fileSystem.BuildPath(parent, child);
+        }
+
+        function setMessage(text, isError) {
+            var message = document.getElementById("message");
+            message.innerText = text;
+            message.style.color = isError ? "#f23f42" : "#b5bac1";
+        }
+
+        function isDiscordInstalled(folderName) {
+            var root = combinePath(shell.ExpandEnvironmentStrings("%LOCALAPPDATA%"), folderName);
+            if (!fileSystem.FolderExists(root)) {
+                return false;
+            }
+
+            var subfolders = new Enumerator(fileSystem.GetFolder(root).SubFolders);
+            for (; !subfolders.atEnd(); subfolders.moveNext()) {
+                var folder = subfolders.item();
+                if (folder.Name.toLowerCase().indexOf("app-") === 0
+                        && fileSystem.FolderExists(combinePath(folder.Path, "resources"))) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function configureBranchOptions() {
+            var options = [
+                { branch: "stable", folder: "Discord" },
+                { branch: "canary", folder: "DiscordCanary" },
+                { branch: "ptb", folder: "DiscordPTB" }
+            ];
+            availableBranches = [];
+
+            for (var index = 0; index < options.length; index++) {
+                var option = options[index];
+                var installed = isDiscordInstalled(option.folder);
+                var container = document.getElementById(option.branch + "Option");
+                container.style.display = installed ? "inline-block" : "none";
+                document.getElementById(option.branch + "Check").disabled = !installed;
+                if (installed) {
+                    availableBranches.push(option.branch);
+                }
+            }
+        }
+
+        function loadSavedBranches() {
+            var selected = { stable: false, canary: false, ptb: false };
+            if (fileSystem.FileExists(shortcutPath)) {
+                try {
+                    var shortcut = shell.CreateShortcut(shortcutPath);
+                    var match = /\/launch:([a-z,]+)/i.exec(shortcut.Arguments);
+                    if (match) {
+                        selected = { stable: false, canary: false, ptb: false };
+                        var savedBranches = match[1].toLowerCase().split(",");
+                        for (var index = 0; index < savedBranches.length; index++) {
+                            selected[savedBranches[index]] = true;
+                        }
+                    }
+                } catch (error) { }
+            }
+
+            document.getElementById("stableCheck").checked = selected.stable && availableBranches.indexOf("stable") >= 0;
+            document.getElementById("canaryCheck").checked = selected.canary && availableBranches.indexOf("canary") >= 0;
+            document.getElementById("ptbCheck").checked = selected.ptb && availableBranches.indexOf("ptb") >= 0;
+        }
+
+        function getSelectedBranches() {
+            var selected = [];
+            for (var index = 0; index < availableBranches.length; index++) {
+                var branch = availableBranches[index];
+                if (document.getElementById(branch + "Check").checked) {
+                    selected.push(branch);
+                }
+            }
+            return selected;
+        }
+
+        function disableDiscordStartupEntries() {
+            var powerShellPath = combinePath(
+                shell.ExpandEnvironmentStrings("%WINDIR%\\System32\\WindowsPowerShell\\v1.0"),
+                "powershell.exe"
+            );
+            var command = "\"" + powerShellPath + "\" -NoLogo -NoProfile -NonInteractive"
+                + " -ExecutionPolicy Bypass -WindowStyle Hidden -File \"" + installedPowerShellPath + "\""
+                + " -DisableDiscordStartupOnly";
+            var exitCode = shell.Run(command, 0, true);
+            if (exitCode !== 0) {
+                throw new Error("Could not disable Discord entries in Windows Startup.");
+            }
+        }
+
+        function branchSelectionChanged() {
+            document.getElementById("addButton").disabled = false;
+            setMessage("Click Add to save which Discord apps should open.", false);
+        }
+
+        function getEntryState() {
+            if (!fileSystem.FileExists(shortcutPath)) {
+                return "not-added";
+            }
+
+            try {
+                var shortcut = shell.CreateShortcut(shortcutPath);
+                var shortcutArguments = shortcut.Arguments.toLowerCase();
+                var correctTarget = shortcutArguments.indexOf(installedLauncherPath.toLowerCase()) >= 0;
+                var startupMode = shortcutArguments.indexOf("/startup") >= 0;
+                var legacyBranchMode = shortcutArguments.indexOf("/branches:") >= 0;
+                var filesExist = fileSystem.FileExists(installedLauncherPath) && fileSystem.FileExists(installedPowerShellPath);
+                var filesCurrent = filesExist
+                    && fileSystem.GetFile(sourceLauncherPath).Size === fileSystem.GetFile(installedLauncherPath).Size
+                    && fileSystem.GetFile(sourcePowerShellPath).Size === fileSystem.GetFile(installedPowerShellPath).Size;
+                return correctTarget && startupMode && !legacyBranchMode && filesCurrent ? "added" : "update";
+            } catch (error) {
+                return "update";
+            }
+        }
+
+        function refreshStatus() {
+            var state = getEntryState();
+            var status = document.getElementById("status");
+            var addButton = document.getElementById("addButton");
+            var removeButton = document.getElementById("removeButton");
+
+            if (state === "added") {
+                status.innerText = "Status: Added to Startup";
+                status.style.color = "#23a55a";
+                addButton.disabled = true;
+                removeButton.disabled = false;
+            } else if (state === "update") {
+                status.innerText = "Status: Update required";
+                status.style.color = "#f0b232";
+                addButton.disabled = false;
+                removeButton.disabled = false;
+            } else {
+                status.innerText = "Status: Not added";
+                status.style.color = "#b5bac1";
+                addButton.disabled = false;
+                removeButton.disabled = true;
+            }
+        }
+
+        function addStartup() {
+            try {
+                var selectedBranches = getSelectedBranches();
+
+                if (!fileSystem.FileExists(sourceLauncherPath)) {
+                    throw new Error("Install Vencord Hidden.vbs was not found.");
+                }
+                if (!fileSystem.FileExists(sourcePowerShellPath)) {
+                    throw new Error("Install-Vencord-All.ps1 was not found.");
+                }
+
+                if (!fileSystem.FolderExists(installDirectory)) {
+                    fileSystem.CreateFolder(installDirectory);
+                }
+
+                fileSystem.CopyFile(sourceLauncherPath, installedLauncherPath, true);
+                fileSystem.CopyFile(sourcePowerShellPath, installedPowerShellPath, true);
+
+                disableDiscordStartupEntries();
+
+                var shortcut = shell.CreateShortcut(shortcutPath);
+                shortcut.TargetPath = wscriptPath;
+                shortcut.Arguments = "\"" + installedLauncherPath + "\" /silent /startup";
+                if (selectedBranches.length > 0) {
+                    shortcut.Arguments += " /launch:" + selectedBranches.join(",");
+                }
+                shortcut.WorkingDirectory = installDirectory;
+                shortcut.Description = "Install and repair Vencord automatically";
+                shortcut.IconLocation = wscriptPath + ",0";
+                shortcut.Save();
+
+                refreshStatus();
+                if (selectedBranches.length > 0) {
+                    setMessage("Added. Selected Discord apps will open after Vencord finishes.", false);
+                } else {
+                    setMessage("Added. Vencord will run, but no Discord app will open automatically.", false);
+                }
+            } catch (error) {
+                setMessage("Could not add: " + error.message, true);
+            }
+        }
+
+        function deleteManagedFile(path) {
+            if (fileSystem.FileExists(path)) {
+                fileSystem.DeleteFile(path, true);
+            }
+        }
+
+        function tryDeleteManagedFile(path) {
+            try {
+                deleteManagedFile(path);
+                return true;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        function removeStartup() {
+            try {
+                // Removing the shortcut is the actual Startup removal. Keep
+                // cleanup failures separate because a running installer can
+                // temporarily keep its working directory in use.
+                deleteManagedFile(shortcutPath);
+
+                var cleanupComplete = true;
+                cleanupComplete = tryDeleteManagedFile(installedLauncherPath) && cleanupComplete;
+                cleanupComplete = tryDeleteManagedFile(installedPowerShellPath) && cleanupComplete;
+                cleanupComplete = tryDeleteManagedFile(installedLogPath) && cleanupComplete;
+
+                if (fileSystem.FolderExists(installDirectory)) {
+                    try {
+                        var folder = fileSystem.GetFolder(installDirectory);
+                        if (folder.Files.Count === 0 && folder.SubFolders.Count === 0) {
+                            fileSystem.DeleteFolder(installDirectory, false);
+                        } else {
+                            cleanupComplete = false;
+                        }
+                    } catch (cleanupError) {
+                        cleanupComplete = false;
+                    }
+                }
+
+                refreshStatus();
+                if (cleanupComplete) {
+                    setMessage("Removed from Startup. Vencord itself was not uninstalled.", false);
+                } else {
+                    setMessage("Removed from Startup. Some helper files are still in use.", false);
+                }
+            } catch (error) {
+                refreshStatus();
+                setMessage("Could not remove: " + error.message, true);
+            }
+        }
+
+        function initialize() {
+            try {
+                shell = new ActiveXObject("WScript.Shell");
+                fileSystem = new ActiveXObject("Scripting.FileSystemObject");
+                sourceDirectory = getSourceDirectory();
+                sourceLauncherPath = combinePath(sourceDirectory, "Install Vencord Hidden.vbs");
+                sourcePowerShellPath = combinePath(sourceDirectory, "Install-Vencord-All.ps1");
+                installDirectory = combinePath(shell.ExpandEnvironmentStrings("%LOCALAPPDATA%"), "VencordAutoInstaller");
+                installedLauncherPath = combinePath(installDirectory, "Install Vencord Hidden.vbs");
+                installedPowerShellPath = combinePath(installDirectory, "Install-Vencord-All.ps1");
+                installedLogPath = combinePath(installDirectory, "Vencord-Install.log");
+                shortcutPath = combinePath(shell.SpecialFolders("Startup"), "Vencord Auto Installer.lnk");
+                wscriptPath = combinePath(shell.ExpandEnvironmentStrings("%WINDIR%\\System32"), "wscript.exe");
+
+                configureBranchOptions();
+                loadSavedBranches();
+                refreshStatus();
+                if (availableBranches.length === 0) {
+                    document.getElementById("addButton").disabled = true;
+                    setMessage("No supported Discord installation was found.", true);
+                }
+
+                if (shell.ExpandEnvironmentStrings("%VENCORD_HTA_CHECK%") === "1") {
+                    window.setTimeout(function () { window.close(); }, 1);
+                }
+            } catch (error) {
+                setMessage("Startup manager error: " + error.message, true);
+            }
+        }
+
+        window.onload = function () {
+            window.resizeTo(470, 330);
+            window.moveTo((screen.availWidth - 470) / 2, (screen.availHeight - 330) / 2);
+            initialize();
+        };
+    </script>
+</head>
+<body>
+    <div class="panel">
+        <h1>Vencord automatic startup</h1>
+        <div id="status">Loading...</div>
+        <div id="message">Add or remove the silent startup installer.</div>
+        <div class="branch-panel">
+            <div class="branch-title">Run at Startup:</div>
+            <label id="stableOption" class="branch-option"><input id="stableCheck" type="checkbox" onchange="branchSelectionChanged()">Discord</label>
+            <label id="canaryOption" class="branch-option"><input id="canaryCheck" type="checkbox" onchange="branchSelectionChanged()">Discord Canary</label>
+            <label id="ptbOption" class="branch-option"><input id="ptbCheck" type="checkbox" onchange="branchSelectionChanged()">Discord PTB</label>
+        </div>
+        <button id="addButton" onclick="addStartup()">Add</button>
+        <button id="removeButton" onclick="removeStartup()">Remove</button>
+    </div>
+</body>
+</html>
