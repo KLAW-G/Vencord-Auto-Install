@@ -1,0 +1,47 @@
+name: Restructure v1
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/restructure-v1.yml
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out release source
+        uses: actions/checkout@v4
+        with:
+          ref: b04d84d380760700726e44bc2b94f1183490d884
+          fetch-depth: 0
+
+      - name: Build package with utilis folder
+        shell: bash
+        run: |
+          set -euo pipefail
+          package_dir="Vencord-Auto-Install-v1"
+          mkdir -p "$package_dir/utilis"
+          cp "Install Vencord Hidden.vbs" "$package_dir/"
+          cp "Startup.vbs" "$package_dir/"
+          cp "utilis/Startup-Manager.hta" "$package_dir/utilis/"
+          cp "utilis/Install-Vencord-All.ps1" "$package_dir/utilis/"
+          zip -9 -r "Vencord-Auto-Install-v1.zip" "$package_dir"
+          sha256sum "Vencord-Auto-Install-v1.zip" > "Vencord-Auto-Install-v1.zip.sha256"
+
+      - name: Move tag and replace release assets
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git tag -f v1 "b04d84d380760700726e44bc2b94f1183490d884"
+          git push origin refs/tags/v1 --force
+          gh release upload v1 \
+            "Vencord-Auto-Install-v1.zip" \
+            "Vencord-Auto-Install-v1.zip.sha256" \
+            --repo "KLAW-G/Vencord-Auto-Install" \
+            --clobber
