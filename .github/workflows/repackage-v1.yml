@@ -1,0 +1,44 @@
+name: Repackage v1
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/repackage-v1.yml
+
+permissions:
+  contents: write
+
+jobs:
+  repackage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out v1
+        uses: actions/checkout@v4
+        with:
+          ref: v1
+
+      - name: Build minimal package
+        shell: bash
+        run: |
+          set -euo pipefail
+          package_dir="Vencord-Auto-Install-v1"
+          mkdir -p "$package_dir"
+          cp "Install Vencord Hidden.vbs" "$package_dir/"
+          cp "Install-Vencord-All.ps1" "$package_dir/"
+          cp "Startup.vbs" "$package_dir/"
+          cp "Startup-Manager.hta" "$package_dir/"
+          zip -9 -r "Vencord-Auto-Install-v1.zip" "$package_dir"
+          sha256sum "Vencord-Auto-Install-v1.zip" > "Vencord-Auto-Install-v1.zip.sha256"
+
+      - name: Replace release assets
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release upload v1 \
+            "Vencord-Auto-Install-v1.zip" \
+            "Vencord-Auto-Install-v1.zip.sha256" \
+            --repo "KLAW-G/Vencord-Auto-Install" \
+            --clobber
