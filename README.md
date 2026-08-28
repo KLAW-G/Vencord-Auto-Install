@@ -9,11 +9,11 @@
   <img src="https://img.shields.io/badge/Integrity-SHA--256-059669?style=for-the-badge" alt="SHA-256 verified">
 </p>
 
-<h3 align="center">تثبيت Vencord تلقائياً — بصمت، بأمان، وعلى جميع نسخ Discord</h3>
+<h3 align="center">Automatic Vencord installation — silent, secure, and built for every Discord channel</h3>
 
-<p align="center" dir="rtl">
-  أداة خفيفة لويندوز تكتشف Discord العادي وCanary وPTB، وتنزّل مُثبّت Vencord الرسمي،<br>
-  وتتحقق من سلامته، ثم تنفّذ جولتي تثبيت وإصلاح لكل نسخة موجودة — بدون نافذة CMD.
+<p align="center">
+  A lightweight Windows tool that detects Discord Stable, Canary, and PTB, downloads the official Vencord Installer,<br>
+  verifies its integrity, then runs two install and repair passes for every detected version — without a CMD window.
 </p>
 
 <p align="center">
@@ -22,74 +22,74 @@
 
 ---
 
-## ✦ لماذا هذه الأداة؟
+## ✦ Why use this tool?
 
-<table dir="rtl">
+<table>
   <tr>
-    <td width="50%"><strong>🌑 تشغيل مخفي بالكامل</strong><br>لا تظهر نافذة CMD أو PowerShell أثناء التثبيت أو التشغيل التلقائي.</td>
-    <td width="50%"><strong>🎯 اكتشاف ذكي</strong><br>تعمل فقط على نسخ Stable وCanary وPTB الموجودة فعلياً على الجهاز.</td>
+    <td width="50%"><strong>🌑 Fully hidden execution</strong><br>No CMD or PowerShell window appears during manual installation or automatic startup.</td>
+    <td width="50%"><strong>🎯 Smart detection</strong><br>Automatically detects the installed Stable, Canary, and PTB versions.</td>
   </tr>
   <tr>
-    <td><strong>🛡️ تحقق أمني</strong><br>تطابق بصمة SHA-256 للمُثبّت مع ملف البصمات المنشور رسمياً.</td>
-    <td><strong>⚡ جولتان لكل نسخة</strong><br>الجولة الثانية تعيد التثبيت والإصلاح للتأكد من اكتمال العملية.</td>
+    <td><strong>🛡️ Integrity verification</strong><br>Checks the installer against the officially published SHA-256 checksum.</td>
+    <td><strong>⚡ Two passes per version</strong><br>The second pass reinstalls or repairs Vencord to help ensure the process completes successfully.</td>
   </tr>
 </table>
 
-## 🚀 التثبيت اليدوي السريع
+## 🚀 Quick manual installation
 
-1. شغّل **`Install Vencord Hidden.vbs`** بنقرتين.
-2. انتظر في الخلفية؛ قد يُغلق Discord تلقائياً أثناء تعديل ملفاته.
-3. سيظهر إشعار صغير عند انتهاء العملية.
-4. افتح إعدادات Discord وتحقق من ظهور قسم **Vencord**.
+1. Double-click **`Install Vencord Hidden.vbs`**.
+2. Let it run in the background. Discord may close automatically while its files are being patched.
+3. A small notification appears when the process finishes.
+4. Open Discord Settings and confirm that the **Vencord** section is available.
 
 > [!IMPORTANT]
-> شغّل الأداة كمستخدم عادي. لا تستخدم **Run as administrator**.
+> Run the tool as a normal user. Do not use **Run as administrator**.
 
 <p align="center">
   <img src="assets/tokyo-ghoul-duality.png" alt="Ken Kaneki human and ghoul duality" width="100%">
 </p>
 
-## 🖥️ واجهة Startup
+## 🖥️ Startup Manager
 
 <p align="center">
   <img src="assets/startup-manager.png" alt="Vencord Startup Manager" width="430">
 </p>
 
-<table dir="rtl">
+<table>
   <tr>
     <td width="50%" align="center">
       <h3>🟢 Add</h3>
-      ينسخ ملفات التشغيل إلى مكان دائم، ثم يضيف التشغيل المخفي إلى Startup.
+      Copies the required files to a persistent location and enables silent startup execution.
     </td>
     <td width="50%" align="center">
       <h3>🔴 Remove</h3>
-      يزيل اختصار Startup وملفات الأداة الدائمة، من دون إزالة Vencord من Discord.
+      Removes the Startup shortcut and cleans up helper files without uninstalling Vencord from Discord.
     </td>
   </tr>
 </table>
 
-### طريقة الإضافة إلى Startup
+### Add it to Startup
 
-1. افتح **`Startup.vbs`** — الواجهة تظهر مباشرة ومن دون انتظار PowerShell.
-2. تحت **Run at Startup** ستظهر فقط نسخ Discord المثبّتة فعلياً على الجهاز. الخانات تحدد أي تطبيق Discord يُفتح بعد انتهاء تثبيت Vencord، وليست لاختيار نسخ التثبيت.
-3. جميع الخانات غير محددة افتراضياً، ويمكن تركها كلها فارغة. اضغط **Add** لحفظ الاختيارات.
-4. تُنسخ الملفات الضرورية تلقائياً إلى:
+1. Open **`Startup.vbs`**. The interface appears immediately without waiting for PowerShell.
+2. Under **Run at Startup**, only installed Discord versions are shown. These checkboxes select which Discord apps open after Vencord finishes; they do not select which versions receive Vencord.
+3. Every checkbox is unchecked by default, and you may leave all of them unchecked. Click **Add** to save your selection.
+4. The required files are copied automatically to:
 
    ```text
    %LOCALAPPDATA%\VencordAutoInstaller
    ```
 
-5. بعد ظهور حالة **Added to Startup** يمكنك حذف مجلد التنزيل بالكامل.
-6. عند تسجيل الدخول إلى ويندوز، تثبّت الأداة Vencord بصمت على جميع نسخ Discord الموجودة، ثم تفتح فقط تطبيقات Discord المحددة في الواجهة. إذا لم تحدد شيئاً فلن يُفتح Discord تلقائياً.
+5. After **Added to Startup** appears, you may safely delete the downloaded project folder.
+6. At Windows sign-in, the tool silently installs Vencord on every detected Discord version, then opens only the Discord apps selected in the interface. If nothing is selected, Discord will not open automatically.
 
-عند التشغيل مع ويندوز، تنتظر الأداة بصمت حتى يصبح GitHub متاحاً عبر الإنترنت، وتعيد الفحص كل 5 ثوانٍ، ثم تبدأ التثبيت تلقائياً. لا يوجد حد زمني للانتظار ولا تظهر نافذة أثناءه.
+When Windows starts, the tool silently waits until GitHub is reachable, checking every five seconds before beginning installation. There is no timeout and no window appears while it waits.
 
-عند الضغط على **Add**، تُضبط عناصر Startup الأصلية الخاصة بـDiscord وDiscord Canary وDiscord PTB على **Disabled** في Task Manager، سواء كانت النسخ الثلاث مثبتة أم لا. بعد اكتمال تثبيت Vencord، يشغّل المساعد فقط تطبيقات Discord المحددة في الخانات. وبعد فتحها ينتظر 10 ثوانٍ ثم يعيد تعطيل القيود الثلاثة، لمنع Discord من إعادة تفعيلها. زر **Remove** لا يعيد تفعيل Startup الخاص بـDiscord.
+When you click **Add**, the native Startup entries for Discord, Discord Canary, and Discord PTB are set to **Disabled** in Task Manager, whether all three versions are installed or not. After Vencord finishes, the helper opens only the Discord apps selected in the interface. It waits ten seconds after launching them and disables the three native entries again to prevent Discord from re-enabling them. **Remove** does not re-enable Discord's native Startup entries.
 
 > [!TIP]
-> زر **Remove** يوقف التشغيل التلقائي ويحذف ملفات المساعد فقط؛ Vencord المثبّت داخل Discord يبقى كما هو.
+> **Remove** disables automatic execution and removes the helper files only. Vencord installed inside Discord remains unchanged. If a helper file is still in use, Startup is still removed and the file can be cleaned up after the active installer exits.
 
-## ⚙️ ماذا يحدث في الخلفية؟
+## ⚙️ What happens in the background?
 
 ```text
 Detect Discord versions
@@ -103,50 +103,50 @@ Install pass 1 → Repair pass 2
 Save result to Vencord-Install.log
 ```
 
-التنفيذ متتالٍ وليس متزامناً على النسخة نفسها، لمنع تعارض عمليتين أثناء تبديل ملفات `app.asar` و`_app.asar`.
+The two passes run sequentially rather than simultaneously for the same Discord version. This prevents conflicts while `app.asar` and `_app.asar` are being replaced.
 
-## 🔐 الأمان والخصوصية
+## 🔐 Security and privacy
 
-- التنزيل يتم من [مستودع Vencord Installer الرسمي](https://github.com/Vencord/Installer/releases/latest).
-- لا تُرسل الأداة بيانات شخصية ولا تحتاج كلمة مرور Discord.
-- لا تثبّت تعريفات Drivers ولا تعدّل ملفات نظام ويندوز.
-- تعمل بصلاحيات المستخدم الحالي فقط.
-- الملفات المؤقتة للمُثبّت والبصمة تُحذف بعد الانتهاء.
-- تفاصيل النجاح أو الخطأ تُحفظ محلياً في **`Vencord-Install.log`**.
+- Downloads come from the [official Vencord Installer repository](https://github.com/Vencord/Installer/releases/latest).
+- The tool does not send personal data and never asks for your Discord password.
+- It does not install drivers or modify Windows system files.
+- It runs only with the current user's permissions.
+- Temporary installer and checksum files are deleted when the process finishes.
+- Success and error details are stored locally in **`Vencord-Install.log`**.
 
-## 📦 ملفات المشروع
+## 📦 Project files
 
-| الملف | الوظيفة |
+| File | Purpose |
 |---|---|
-| `Install Vencord Hidden.vbs` | المشغّل المخفي للتثبيت والإصلاح |
-| `Install-Vencord-All.ps1` | اكتشاف Discord، التنزيل، التحقق، وتنفيذ الجولتين |
-| `Startup.vbs` | فتح واجهة إدارة Startup السريعة |
-| `Startup-Manager.hta` | واجهة Add وRemove الداكنة |
-| `Vencord-Install.log` | سجل آخر عملية تشغيل، ويظهر بعد تشغيل الأداة |
+| `Install Vencord Hidden.vbs` | Hidden launcher for installation and repair |
+| `Install-Vencord-All.ps1` | Detects Discord, downloads and verifies the installer, and runs both passes |
+| `Startup.vbs` | Opens the fast Startup Manager interface |
+| `Startup-Manager.hta` | Dark Add and Remove interface |
+| `Vencord-Install.log` | Log from the latest run; created after the tool runs |
 
-## 🧪 اختبار آمن بدون تعديل Discord
+## 🧪 Safe test without modifying Discord
 
-افتح PowerShell داخل المجلد وشغّل:
+Open PowerShell in the project folder and run:
 
 ```powershell
 .\Install-Vencord-All.ps1 -DryRun -Passes 2
 ```
 
-هذا الوضع يختبر اكتشاف نسخ Discord، وتنزيل المُثبّت، والتحقق من بصمته، من دون تثبيت أو تعديل أي ملف في Discord.
+This mode tests Discord detection, downloads the installer, and verifies its checksum without installing Vencord or modifying any Discord files.
 
-## 🧩 عند حدوث مشكلة
+## 🧩 Troubleshooting
 
-1. تأكد أن اتصال الإنترنت يعمل وأن GitHub غير محجوب.
-2. أغلق Discord بالكامل ثم أعد تشغيل **`Install Vencord Hidden.vbs`**.
-3. راجع ملف **`Vencord-Install.log`** لمعرفة النسخة أو الجولة التي فشلت.
-4. إذا نقلت ملفات التنزيل قبل الضغط على Add، افتح `Startup.vbs` من موقعها الجديد واضغط Add مرة أخرى.
+1. Make sure your internet connection works and GitHub is not blocked.
+2. Close Discord completely, then run **`Install Vencord Hidden.vbs`** again.
+3. Check **`Vencord-Install.log`** to identify the version or pass that failed.
+4. If you moved the downloaded files before clicking Add, open `Startup.vbs` from the new location and click Add again.
 
 ---
 
-<p align="center" dir="rtl">
+<p align="center">
   <strong>Vencord Auto Installer</strong><br>
-  داكن، سريع، وصامت — مصنوع لتثبيت أقل إزعاجاً.
+  Dark, fast, and silent — built for a smoother installation.
 </p>
 
 > [!WARNING]
-> Vencord تعديل غير رسمي لبرنامج Discord وقد يخالف شروط خدمة Discord. استخدامه يقع على مسؤولية المستخدم.
+> Vencord is an unofficial Discord modification and may violate Discord's Terms of Service. Use it at your own risk.
